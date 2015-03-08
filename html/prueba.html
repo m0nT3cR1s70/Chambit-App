@@ -1,0 +1,35 @@
+<html>
+	<head>
+	</head>
+	<body>
+		Latitud
+		<input type="text" id="latitud">
+		Longitud
+		<input type="text" id="longitud">
+		<input type="button" id="buscar" value="Buscar">
+
+		<div id="info"></div>
+
+		<script src="jquery.js"></script>
+		<script>
+			$(document).on("ready",main);
+			function main(){
+				$("#buscar").on("click",function(){
+					var texto = ""; 
+					var latitud   = $("#latitud").val();
+					var longitud  = $("#longitud").val(); 
+					$("#info").text("Cargando ...");
+					$.getJSON("http://datos.labplc.mx/georeferencia.json?&latitud="+latitud+"&longitud="+longitud+"&radio=500",function(datos){
+
+						$.each(datos.items,function(i,item){
+							texto += "<div class='cuadro'>";
+							texto += "<b>Delegacion:</b>  "+item.consulta.cuadrante.delegacion+" ";
+							texto += "</div>";
+						});
+						$("#info").html(texto);
+					});
+				});
+			}
+		</script>
+	</body>
+</html>

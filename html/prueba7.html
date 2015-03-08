@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<HTML>
+   <HEAD>
+      <TITLE>
+         A Small Hello 
+      </TITLE>
+   </HEAD>
+<BODY>
+   <video autoplay></video>
+<img src="">
+<canvas style="display:none;"></canvas>
+
+<script>
+  //Revisamos si es soportado por este navegador
+	navigator.getUserMedia = ( navigator.getUserMedia ||
+						   navigator.webkitGetUserMedia ||
+						   navigator.mozGetUserMedia ||
+						   navigator.msGetUserMedia);
+
+	if (navigator.getUserMedia) {
+	   navigator.getUserMedia (
+
+		  // constraints
+		  {
+			 video: true,
+			 audio: true
+		  },
+
+		  // successCallback
+		  function(localMediaStream) {
+			 var video = document.querySelector('video');
+			 video.src = window.URL.createObjectURL(localMediaStream);
+			 // Do something with the video here, e.g. video.play()
+			 alert("Todo esta correcto");
+		  },
+
+		  // errorCallback
+		  function(err) {
+			 alert("The following error occured: " + err);
+		  }
+	   );
+	} else {
+	   alert("getUserMedia not supported");
+	}
+
+  var video = document.querySelector('video');
+  var canvas = document.querySelector('canvas');
+  var ctx = canvas.getContext('2d');
+  var localMediaStream = null;
+
+  alert("Video: " + video);
+  alert("Canvas: " + canvas);
+  alert("Ctx: " + ctx);
+  alert("Local: " + localMediaStream);
+  
+  alert("Pre Foto");
+  function snapshot() {
+    if (localMediaStream) {
+      ctx.drawImage(video, 0, 0);
+      // "image/webp" works in Chrome.
+      // Other browsers will fall back to image/png.
+	  alert("Tomo Foto");
+      document.querySelector('img').src = canvas.toDataURL('image/webp');
+    }
+  }
+
+  alert("Post Foto");
+  
+  video.addEventListener('click', snapshot, false);
+
+  // Not showing vendor prefixes or code that works cross-browser.
+  alert("A");
+  navigator.getUserMedia({video: true}, function(stream) {
+	alert("B");
+    video.src = window.URL.createObjectURL(stream);
+	alert("C");	
+    localMediaStream = stream;
+	alert("D");
+  }, errorCallback);
+  alert("E");
+</script>
+
+<p>Esto es una prueba</p>
+</BODY>
+</HTML>
